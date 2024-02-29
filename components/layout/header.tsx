@@ -1,7 +1,6 @@
 import { styled } from "styled-components";
 import { Box } from "@mui/material";
-import Image from "next/image";
-import { dataContactLinks } from "../data/link";
+import { dataContactLinks } from "../Data/Link";
 
 const Header = () => {
   const handleOpenLink = (each: any) => {
@@ -96,6 +95,7 @@ const SectionMark = styled(Box)`
   left: -240px;
   top: 10px;
   width: 270px;
+  user-select: none;
 `;
 
 export default Header;

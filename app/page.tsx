@@ -2,13 +2,20 @@
 
 import { styled } from "styled-components";
 import { Box } from "@mui/material";
-import Header from "@/components/layout/header";
+import Header from "@/components/Layout/Header";
+import BridgeProgressBar from "@/components/ProgressBar/BridgeProgressBar";
+import { useState } from "react";
 
 export default function Home() {
+  const [stepProgress, setStepProgress] = useState(0);
+
   return (
     <StyledComponent>
       <SectionInside>
         <Header />
+        <SectionContent>
+          <BridgeProgressBar stepProgress={stepProgress} />
+        </SectionContent>
       </SectionInside>
     </StyledComponent>
   );
@@ -31,4 +38,10 @@ const SectionInside = styled(Box)`
   background-color: #252525;
   padding: 30px;
   box-sizing: border-box;
+`;
+
+const SectionContent = styled(Box)`
+  display: flex;
+  width: 100%;
+  margin-top: 120px;
 `;
