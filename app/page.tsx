@@ -7,15 +7,13 @@ import BridgeProgressBar from "@/components/ProgressBar/BridgeProgressBar";
 import { useEffect, useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
-import { PiSquaresFourBold, PiSquaresFourFill } from "react-icons/pi";
 import { dataNFTsList } from "@/components/Data/NFT";
-import NFTSimpleCard from "@/components/Card/NFTSimpleCard";
+import StepSelectNFTs from "@/components/Tab/StepSelectNFTs";
 
 export default function Home() {
   const { address, isConnected } = useAccount();
   const [stepProgress, setStepProgress] = useState(0);
   const [arraySelected, setArraySelected] = useState<any>([]);
-  const [flagSelectAll, setFlagSelectAll] = useState(false);
 
   useEffect(() => {
     if (isConnected) {
@@ -36,19 +34,6 @@ export default function Home() {
     }
   }, [isConnected]);
 
-  const handleSelectAll = () => {
-    setFlagSelectAll(!flagSelectAll);
-    if (!flagSelectAll) {
-      setArraySelected(
-        arraySelected.map((each: any) => ({ ...each, flagSelected: true }))
-      );
-    } else {
-      setArraySelected(
-        arraySelected.map((each: any) => ({ ...each, flagSelected: false }))
-      );
-    }
-  };
-
   return (
     <StyledComponent>
       <SectionInside>
@@ -66,40 +51,14 @@ export default function Home() {
                   <TextConnectedWallet>Connected Wallet</TextConnectedWallet>
                   <ConnectButton></ConnectButton>
                 </SectionConnected>
-                <SectionNFTSelectedStats>
-                  <TextSelectedNFTCounts>
-                    {
-                      arraySelected.filter((each: any) => each.flagSelected)
-                        .length
-                    }{" "}
-                    out of {arraySelected.length}
-                  </TextSelectedNFTCounts>
-                  <ButtonSelectAll onClick={() => handleSelectAll()}>
-                    <IconAll>
-                      {flagSelectAll ? (
-                        <PiSquaresFourFill />
-                      ) : (
-                        <PiSquaresFourBold />
-                      )}
-                    </IconAll>
-                    <TextSelectAll>
-                      {flagSelectAll ? "Deselect All" : "Select All"}
-                    </TextSelectAll>
-                  </ButtonSelectAll>
-                </SectionNFTSelectedStats>
-                <SectionDisplayNFTs>
-                  {arraySelected.map((each: any, index: any) => {
-                    return (
-                      <NFTSimpleCard
-                        each={each}
-                        key={index}
-                        index={index}
-                        arraySelected={arraySelected}
-                        setArraySelected={setArraySelected}
-                      />
-                    );
-                  })}
-                </SectionDisplayNFTs>
+                {stepProgress === 1 ? (
+                  <StepSelectNFTs
+                    arraySelected={arraySelected}
+                    setArraySelected={setArraySelected}
+                  />
+                ) : (
+                  <></>
+                )}
               </SectionContentLeft02>
             )}
 
@@ -190,60 +149,4 @@ const SectionConnected = styled(Box)`
   width: 100%;
   align-items: center;
   justify-content: space-between;
-`;
-
-const SectionNFTSelectedStats = styled(Box)`
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 30px;
-`;
-
-const TextSelectedNFTCounts = styled(Box)`
-  font-family: Gochi Hand;
-  font-size: 20px;
-  font-weight: 400;
-  line-height: 24px;
-  letter-spacing: 0em;
-  text-align: left;
-  color: white;
-`;
-
-const ButtonSelectAll = styled(Box)`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  user-select: none;
-  color: rgba(206, 207, 210, 0.7);
-
-  transition: 0.2s;
-  &:hover {
-    color: white;
-  }
-`;
-
-const IconAll = styled(Box)`
-  /* display: flex; */
-  font-size: 20px;
-  margin-right: 5px;
-`;
-
-const TextSelectAll = styled(Box)`
-  /* display: flex; */
-  font-family: Gochi Hand;
-  font-size: 20px;
-  font-weight: 400;
-  line-height: 20px;
-  letter-spacing: 0em;
-  text-align: left;
-`;
-
-const SectionDisplayNFTs = styled(Box)`
-  display: grid;
-  width: 100%;
-  margin-top: 10px;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-column-gap: 20px;
-  grid-row-gap: 20px;
 `;
