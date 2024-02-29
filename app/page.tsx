@@ -29,6 +29,6 @@ const SectionInside = styled(Box)`
   flex-direction: column;
   border-radius: 30px;
   background-color: #252525;
-  padding: 20px;
+  padding: 30px;
   box-sizing: border-box;
 `;
