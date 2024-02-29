@@ -30,9 +30,14 @@ const StepSelectNFTs = ({
       (each: any) => each.flagSelected
     ).length;
     if (countSelected <= 0) {
-      toast.error("Please select NFTs.");
+      return toast.error("Please select NFTs.");
     }
-    setStepProgress(1);
+    setStepProgress(2);
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
   };
 
   return (

@@ -9,10 +9,12 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
 import { dataNFTsList } from "@/components/Data/NFT";
 import StepSelectNFTs from "@/components/Tab/StepSelectNFTs";
+import StepInputSolana from "@/components/Tab/StepInputSolana";
 
 export default function Home() {
   const { address, isConnected } = useAccount();
   const [stepProgress, setStepProgress] = useState(0);
+  const [addressSolana, setAddressSolana] = useState();
   const [arraySelected, setArraySelected] = useState<any>([]);
 
   useEffect(() => {
@@ -56,6 +58,12 @@ export default function Home() {
                     arraySelected={arraySelected}
                     setArraySelected={setArraySelected}
                     setStepProgress={setStepProgress}
+                  />
+                ) : stepProgress === 2 ? (
+                  <StepInputSolana
+                    setStepProgress={setStepProgress}
+                    addressSolana={addressSolana}
+                    setAddressSolana={setAddressSolana}
                   />
                 ) : (
                   <></>
