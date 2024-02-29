@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import { useState } from "react";
 import styled from "styled-components";
 import toast from "react-hot-toast";
-import { MdContentPasteGo } from "react-icons/md";
+import { MdContentPasteGo, MdOutlineKeyboardArrowDown } from "react-icons/md";
 
 const StepInputSolana = ({
   setStepProgress,
@@ -56,6 +56,18 @@ const StepInputSolana = ({
           </IconPaste>
         </SectionPaste>
       </SectionInputSolAddress>
+      <TextBody>Select Network</TextBody>
+      <SectionSelectNetwork>
+        <InputAddress component="input" placeholder="SOLANA" disabled />
+        <IconSelectNetwork>
+          <MdOutlineKeyboardArrowDown />
+        </IconSelectNetwork>
+      </SectionSelectNetwork>
+      <SectionEstimateGas>
+        <TextEstimateGas>Estimated Gas Fee</TextEstimateGas>
+        <TextEstimateGas>0.002 ETH</TextEstimateGas>
+      </SectionEstimateGas>
+
       <SectionButtonStep>
         <ButtonCancel onClick={() => handleCancelStep()}>Cancel</ButtonCancel>
         <ButtonNext onClick={() => handleNextStep()}>Next</ButtonNext>
@@ -98,7 +110,7 @@ const SectionInputSolAddress = styled(Box)`
   align-items: center;
   justify-content: space-between;
   border: 1px solid rgba(51, 55, 65, 1);
-  border-radius: 12px;
+  border-radius: 6px;
   padding: 0px 10px;
   box-sizing: border-box;
 
@@ -108,6 +120,24 @@ const SectionInputSolAddress = styled(Box)`
     > div:nth-child(1) {
       color: white !important;
     }
+  }
+`;
+
+const SectionSelectNetwork = styled(Box)`
+  display: flex;
+  width: 100%;
+  height: 44px;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid rgba(51, 55, 65, 1);
+  border-radius: 6px;
+  padding: 0px 10px;
+  box-sizing: border-box;
+  user-select: none;
+  transition: 0.2s;
+
+  &:hover {
+    border: 1px solid white;
   }
 `;
 
@@ -235,6 +265,30 @@ const IconPaste = styled(Box)`
   transform: rotateY(180deg);
   font-size: 20px;
   color: rgba(148, 150, 156, 1);
+`;
+
+const IconSelectNetwork = styled(Box)`
+  display: flex;
+  color: rgba(206, 207, 210, 1);
+  font-size: 20px;
+`;
+
+const SectionEstimateGas = styled(Box)`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+`;
+
+const TextEstimateGas = styled(Box)`
+  font-family: Gochi Hand;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 19px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: rgba(206, 207, 210, 1);
 `;
 
 export default StepInputSolana;
