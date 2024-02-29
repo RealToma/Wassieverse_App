@@ -7,7 +7,9 @@ import BridgeProgressBar from "@/components/ProgressBar/BridgeProgressBar";
 import { useEffect, useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount } from "wagmi";
-import { PiSquaresFourBold } from "react-icons/pi";
+import { PiSquaresFourBold, PiSquaresFourFill } from "react-icons/pi";
+import { dataNFTsList } from "@/components/Data/NFT";
+import NFTSimpleCard from "@/components/Card/NFTSimpleCard";
 
 export default function Home() {
   const { address, isConnected } = useAccount();
@@ -50,11 +52,22 @@ export default function Home() {
                   </TextSelectedNFTCounts>
                   <ButtonSelectAll onClick={() => handleSelectAll()}>
                     <IconAll>
-                      <PiSquaresFourBold />
+                      {flagSelectAll ? (
+                        <PiSquaresFourFill />
+                      ) : (
+                        <PiSquaresFourBold />
+                      )}
                     </IconAll>
-                    <TextSelectAll>Select all</TextSelectAll>
+                    <TextSelectAll>
+                      {flagSelectAll ? "Deselect All" : "Select All"}
+                    </TextSelectAll>
                   </ButtonSelectAll>
                 </SectionNFTSelectedStats>
+                <SectionDisplayNFTs>
+                  {dataNFTsList.map((each: any, index: any) => {
+                    return <NFTSimpleCard each={each} key={index} />;
+                  })}
+                </SectionDisplayNFTs>
               </SectionContentLeft02>
             )}
 
@@ -62,6 +75,7 @@ export default function Home() {
               <img
                 src={"/assets/images/wassie1.png"}
                 width={"100%"}
+                height={"100%"}
                 alt="wassie"
               />
             </SectionBackImage>
@@ -126,6 +140,7 @@ const SectionBackImage = styled(Box)`
   display: flex;
   width: 450px;
   margin-left: 100px;
+  height: fit-content;
 `;
 
 const TextConnectedWallet = styled(Box)`
@@ -190,4 +205,13 @@ const TextSelectAll = styled(Box)`
   line-height: 20px;
   letter-spacing: 0em;
   text-align: left;
+`;
+
+const SectionDisplayNFTs = styled(Box)`
+  display: grid;
+  width: 100%;
+  margin-top: 10px;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
 `;
