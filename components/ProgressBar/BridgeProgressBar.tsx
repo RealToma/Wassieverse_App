@@ -191,13 +191,13 @@ const SectionIconCircleSmall = styled(Box)`
   animation: shadow-animation 2s infinite;
   @keyframes shadow-animation {
     0% {
-      box-shadow: 0px 0px 3px 5px rgba(0, 207, 255, 0.3);
+      box-shadow: 0px 0px 5px 5px rgba(0, 207, 255, 0.3);
     }
     50% {
       box-shadow: 0px 0px 3px 5px rgba(0, 207, 255, 0);
     }
     100% {
-      box-shadow: 0px 0px 3px 5px rgba(0, 207, 255, 0.3);
+      box-shadow: 0px 0px 5px 5px rgba(0, 207, 255, 0.3);
     }
   }
 `;

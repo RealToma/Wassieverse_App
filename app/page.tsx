@@ -14,12 +14,23 @@ import NFTSimpleCard from "@/components/Card/NFTSimpleCard";
 export default function Home() {
   const { address, isConnected } = useAccount();
   const [stepProgress, setStepProgress] = useState(0);
-  const [countsSelected, setCountSelected] = useState(0);
+  const [arraySelected, setArraySelected] = useState<any>([]);
   const [flagSelectAll, setFlagSelectAll] = useState(false);
 
   useEffect(() => {
     if (isConnected) {
       setStepProgress(1);
+      let tempArray = [];
+      for (var i = 0; i < dataNFTsList.length; i++) {
+        const dataEach = {
+          id: i,
+          name: dataNFTsList[i].name,
+          imgSrc: dataNFTsList[i].imgSrc,
+          flagSelected: false,
+        };
+        tempArray.push(dataEach);
+      }
+      setArraySelected(tempArray);
     } else {
       setStepProgress(0);
     }
@@ -27,6 +38,15 @@ export default function Home() {
 
   const handleSelectAll = () => {
     setFlagSelectAll(!flagSelectAll);
+    if (!flagSelectAll) {
+      setArraySelected(
+        arraySelected.map((each: any) => ({ ...each, flagSelected: true }))
+      );
+    } else {
+      setArraySelected(
+        arraySelected.map((each: any) => ({ ...each, flagSelected: false }))
+      );
+    }
   };
 
   return (
@@ -48,7 +68,11 @@ export default function Home() {
                 </SectionConnected>
                 <SectionNFTSelectedStats>
                   <TextSelectedNFTCounts>
-                    {countsSelected} out of 12
+                    {
+                      arraySelected.filter((each: any) => each.flagSelected)
+                        .length
+                    }{" "}
+                    out of {arraySelected.length}
                   </TextSelectedNFTCounts>
                   <ButtonSelectAll onClick={() => handleSelectAll()}>
                     <IconAll>
@@ -64,8 +88,16 @@ export default function Home() {
                   </ButtonSelectAll>
                 </SectionNFTSelectedStats>
                 <SectionDisplayNFTs>
-                  {dataNFTsList.map((each: any, index: any) => {
-                    return <NFTSimpleCard each={each} key={index} />;
+                  {arraySelected.map((each: any, index: any) => {
+                    return (
+                      <NFTSimpleCard
+                        each={each}
+                        key={index}
+                        index={index}
+                        arraySelected={arraySelected}
+                        setArraySelected={setArraySelected}
+                      />
+                    );
                   })}
                 </SectionDisplayNFTs>
               </SectionContentLeft02>

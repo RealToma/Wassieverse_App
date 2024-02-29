@@ -1,20 +1,30 @@
 import { styled } from "styled-components";
 import { Box } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaSquareCheck } from "react-icons/fa6";
 
-const NFTSimpleCard = ({ each }: any) => {
-  const [flagSelected, setFlagSelected] = useState(false);
+const NFTSimpleCard = ({
+  each,
+  index,
+  arraySelected,
+  setArraySelected,
+  flagSelectAll,
+}: any) => {
+  const handleSelect = () => {
+    setArraySelected(
+      arraySelected.map((each: any) =>
+        each.id === index ? { ...each, flagSelected: !each.flagSelected } : each
+      )
+    );
+  };
 
   return (
     <StyledComponent
-      onClick={() => {
-        setFlagSelected(!flagSelected);
-      }}
-      active={flagSelected ? 1 : 0}
+      onClick={() => handleSelect()}
+      active={each.flagSelected ? 1 : 0}
     >
       <img src={each.imgSrc} width={"100%"} alt={each.name} />
-      {flagSelected ? (
+      {each.flagSelected ? (
         <IconSelected>
           <FaSquareCheck />
         </IconSelected>
