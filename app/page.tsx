@@ -55,6 +55,7 @@ export default function Home() {
                   <StepSelectNFTs
                     arraySelected={arraySelected}
                     setArraySelected={setArraySelected}
+                    setStepProgress={setStepProgress}
                   />
                 ) : (
                   <></>
