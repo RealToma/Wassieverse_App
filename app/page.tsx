@@ -10,6 +10,8 @@ import { useAccount } from "wagmi";
 import { dataNFTsList } from "@/components/Data/NFT";
 import StepSelectNFTs from "@/components/Tab/StepSelectNFTs";
 import StepInputSolana from "@/components/Tab/StepInputSolana";
+import StepTransferNFT from "@/components/Tab/StepTransferNFT";
+import StepTransferSuccess from "@/components/Tab/StepTransferSuccess";
 
 export default function Home() {
   const { address, isConnected } = useAccount();
@@ -65,8 +67,10 @@ export default function Home() {
                     addressSolana={addressSolana}
                     setAddressSolana={setAddressSolana}
                   />
+                ) : stepProgress === 3 ? (
+                  <StepTransferNFT setStepProgress={setStepProgress} />
                 ) : (
-                  <></>
+                  <StepTransferSuccess setStepProgress={setStepProgress} />
                 )}
               </SectionContentLeft02>
             )}

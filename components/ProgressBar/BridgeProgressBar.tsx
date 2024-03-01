@@ -36,7 +36,7 @@ const BridgeProgressBar = ({ stepProgress }: any) => {
           <SectionTextGroup>
             <TextSubject>Connect Your Wallet</TextSubject>
             <TextDescription>
-              Connect your wallet to load your NFT’s
+              Connect your wallet to load your NFT’s.
             </TextDescription>
           </SectionTextGroup>
         </SectionStatsConnectWallet>
@@ -73,13 +73,13 @@ const BridgeProgressBar = ({ stepProgress }: any) => {
           <SectionTextGroup>
             <TextSubject>Select Your NFT’s</TextSubject>
             <TextDescription>
-              Select the NFT’s that you want to transfer
+              Select the NFT’s that you want to transfer.
             </TextDescription>
           </SectionTextGroup>
         </SectionStatsSelectNFT>
 
         <SectionTransferNFT>
-          {stepProgress === 2 ? (
+          {stepProgress === 3 ? (
             <SectionIconCurrent>
               <SectionIconRotateRect></SectionIconRotateRect>
               <IconCurrent>
@@ -90,7 +90,7 @@ const BridgeProgressBar = ({ stepProgress }: any) => {
                 />
               </IconCurrent>
             </SectionIconCurrent>
-          ) : stepProgress === 3 ? (
+          ) : stepProgress === 4 ? (
             <SectionIconCurrent>
               <SectionIconCircleBig></SectionIconCircleBig>
               <IconProcessed>
@@ -110,7 +110,7 @@ const BridgeProgressBar = ({ stepProgress }: any) => {
           <SectionTextGroup>
             <TextSubject>Transfer Your NFT’s</TextSubject>
             <TextDescription>
-              Transfer your existing NFT’s on SOLANA network
+              Transfer your existing NFT’s on SOLANA network.
             </TextDescription>
           </SectionTextGroup>
         </SectionTransferNFT>

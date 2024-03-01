@@ -69,7 +69,7 @@ const StepInputSolana = ({
       </SectionEstimateGas>
 
       <SectionButtonStep>
-        <ButtonCancel onClick={() => handleCancelStep()}>Cancel</ButtonCancel>
+        <ButtonCancel onClick={() => handleCancelStep()}>Back</ButtonCancel>
         <ButtonNext onClick={() => handleNextStep()}>Next</ButtonNext>
       </SectionButtonStep>
     </StyledComponent>
