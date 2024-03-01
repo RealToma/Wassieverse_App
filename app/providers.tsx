@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import * as React from 'react';
+import * as React from "react";
 import {
   RainbowKitProvider,
   getDefaultWallets,
   getDefaultConfig,
-} from '@rainbow-me/rainbowkit';
+} from "@rainbow-me/rainbowkit";
 import {
   argentWallet,
   trustWallet,
   ledgerWallet,
-} from '@rainbow-me/rainbowkit/wallets';
+} from "@rainbow-me/rainbowkit/wallets";
 import {
   arbitrum,
   base,
@@ -18,31 +18,32 @@ import {
   optimism,
   polygon,
   sepolia,
+  goerli,
   zora,
-} from 'wagmi/chains';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { WagmiProvider } from 'wagmi';
+} from "wagmi/chains";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { WagmiProvider } from "wagmi";
 
 const { wallets } = getDefaultWallets();
 
 const config = getDefaultConfig({
-  appName: 'RainbowKit demo',
-  projectId: 'YOUR_PROJECT_ID',
+  appName: "Wassiverse",
+  projectId: process.env.NEXT_PUBLIC_PROJECT_ID as any,
   wallets: [
     ...wallets,
     {
-      groupName: 'Other',
+      groupName: "Other",
       wallets: [argentWallet, trustWallet, ledgerWallet],
     },
   ],
   chains: [
-    mainnet,
-    polygon,
-    optimism,
-    arbitrum,
-    base,
-    zora,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true' ? [sepolia] : []),
+    // mainnet,
+    // polygon,
+    // optimism,
+    // arbitrum,
+    // base,
+    // zora,
+    process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? goerli : mainnet,
   ],
   ssr: true,
 });
