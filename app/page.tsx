@@ -15,12 +15,14 @@ import StepTransferSuccess from "@/components/Tab/StepTransferSuccess";
 import { abiWassieverse } from "@/lib/abi";
 import { ethers } from "ethers";
 import axios from "axios";
+import LoadingEffectMain from "@/components/Loading/LoadingEffectMain";
 
 export default function Home() {
   const { address, isConnected } = useAccount();
   const [stepProgress, setStepProgress] = useState(0);
   const [addressSolana, setAddressSolana] = useState();
   const [arraySelected, setArraySelected] = useState<any>([]);
+  const [flagLoadingNFTs, setFlagLoadingNFTs] = useState(false);
 
   const addressContractNFT =
     process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true"
@@ -38,11 +40,11 @@ export default function Home() {
     args: [address],
   });
 
-  const resultTotalSupply: any = useReadContract({
-    ...contract,
-    functionName: "totalSupply",
-    args: [],
-  });
+  // const resultTotalSupply: any = useReadContract({
+  //   ...contract,
+  //   functionName: "totalSupply",
+  //   args: [],
+  // });
 
   const provider = new ethers.providers.InfuraProvider(
     process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? "goerli" : "homestead",
@@ -66,11 +68,14 @@ export default function Home() {
   };
 
   const getOwnedNFTs = async () => {
-    console.log("123");
     try {
+      setFlagLoadingNFTs(true);
+      const totalSupply = await contractNFT.totalSupply();
+      // console.log("totalSupply:", Number(totalSupply._hex));
       const arrayOwnedTokenIDs = [];
-      for (var i = 0; i < Number(resultTotalSupply.data); i++) {
+      for (var i = 0; i < Number(totalSupply._hex); i++) {
         let resultAddress = await contractNFT.ownerOf(i);
+        // console.log("resultAddress:", resultAddress);
         if (resultAddress === address) {
           arrayOwnedTokenIDs.push(i);
         }
@@ -79,8 +84,8 @@ export default function Home() {
 
       const arrayInfoOwnedNFTs = [];
       if (arrayOwnedTokenIDs.length !== 0) {
-        for (var i = 0; i < arrayOwnedTokenIDs.length - 1; i++) {
-          let resultURI = await contractNFT.tokenURI(i);
+        for (var i = 0; i < arrayOwnedTokenIDs.length; i++) {
+          let resultURI = await contractNFT.tokenURI(arrayOwnedTokenIDs[i]);
           console.log("resultURI:", resultURI);
           console.log("link:", resultURI.slice(7, resultURI.length));
           const fetchIPFS = await axios.get(
@@ -90,8 +95,19 @@ export default function Home() {
           let tempInfoNFT;
           if (checkRevealData(resultURI) === false) {
             tempInfoNFT = {
+              id: i,
               name: "Unrevealed",
               description: "This is unrevealed NFT.",
+              image:
+                "https://ipfs.io/ipfs/" +
+                fetchIPFS.data.image.slice(7, fetchIPFS.data.image.length),
+              flagSelected: false,
+            };
+          } else {
+            tempInfoNFT = {
+              id: i,
+              name: fetchIPFS.data.name,
+              description: fetchIPFS.data.description,
               image:
                 "https://ipfs.io/ipfs/" +
                 fetchIPFS.data.image.slice(7, fetchIPFS.data.image.length),
@@ -102,6 +118,7 @@ export default function Home() {
         }
         console.log("arrayInfoOwnedNFTs:", arrayInfoOwnedNFTs);
         setArraySelected(arrayInfoOwnedNFTs);
+        setFlagLoadingNFTs(false);
       }
     } catch (error) {
       console.log("error of getOwnedNFTs:", error);
@@ -109,17 +126,19 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (isConnected) {
+    if (isConnected && address !== undefined) {
       // getOwnedNFTs();
       setStepProgress(1);
     } else {
       setStepProgress(0);
     }
-  }, [isConnected]);
+  }, [isConnected, address]);
 
   useEffect(() => {
-    getOwnedNFTs();
-  }, []);
+    if (isConnected) {
+      getOwnedNFTs();
+    }
+  }, [isConnected, address]);
 
   return (
     <StyledComponent>
@@ -169,6 +188,7 @@ export default function Home() {
           </SectionContent>
         </SectionBridge>
       </SectionInside>
+      {flagLoadingNFTs ? <LoadingEffectMain text={"Loading NFTs"} /> : <></>}
     </StyledComponent>
   );
 }

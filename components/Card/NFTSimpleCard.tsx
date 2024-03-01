@@ -53,10 +53,10 @@ const StyledComponent = styled(Box)`
   transition: 0.2s;
   cursor: pointer;
   &:hover {
-    /* border: 2px solid rgba(0, 207, 255, 1); */
-    > img {
+    border: 2px solid rgba(0, 207, 255, 1);
+    /* > img {
       transform: scale(1.2);
-    }
+    } */
   }
 `;
 
