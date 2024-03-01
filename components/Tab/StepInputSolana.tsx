@@ -10,6 +10,13 @@ const StepInputSolana = ({
   setAddressSolana,
 }: any) => {
   const handleNextStep = () => {
+    if (
+      addressSolana === null ||
+      addressSolana === undefined ||
+      addressSolana === ""
+    ) {
+      return toast.error("Input your SOL address.");
+    }
     setStepProgress(3);
     window.scrollTo({
       top: 0,
