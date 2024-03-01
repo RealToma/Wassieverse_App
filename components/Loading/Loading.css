@@ -50,7 +50,7 @@
   border-right: 4px solid #00cfff;
 
   border-radius: 50%;
-  animation: animateC 1s linear infinite;
+  animation: animateC 0.8s linear infinite;
 }
 
 .page_loading_spin {
@@ -63,7 +63,7 @@
   background: transparent;
   box-shadow: 0 0 10px #00cfff;
   transform-origin: left;
-  animation: animateSpan 1s linear infinite;
+  animation: animateSpan 0.8s linear infinite;
 }
 
 .page_loading_spin:before {
