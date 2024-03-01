@@ -23,7 +23,7 @@ const NFTSimpleCard = ({
       onClick={() => handleSelect()}
       active={each.flagSelected ? 1 : 0}
     >
-      <img src={each.imgSrc} width={"100%"} alt={each.name} />
+      <img src={each.image} width={"100%"} alt={each.name} />
       {each.flagSelected ? (
         <IconSelected>
           <FaSquareCheck />

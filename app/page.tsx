@@ -6,12 +6,15 @@ import Header from "@/components/Layout/Header";
 import BridgeProgressBar from "@/components/ProgressBar/BridgeProgressBar";
 import { useEffect, useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAccount } from "wagmi";
+import { useAccount, useReadContract } from "wagmi";
 import { dataNFTsList } from "@/components/Data/NFT";
 import StepSelectNFTs from "@/components/Tab/StepSelectNFTs";
 import StepInputSolana from "@/components/Tab/StepInputSolana";
 import StepTransferNFT from "@/components/Tab/StepTransferNFT";
 import StepTransferSuccess from "@/components/Tab/StepTransferSuccess";
+import { abiWassieverse } from "@/lib/abi";
+import { ethers } from "ethers";
+import axios from "axios";
 
 export default function Home() {
   const { address, isConnected } = useAccount();
@@ -19,24 +22,104 @@ export default function Home() {
   const [addressSolana, setAddressSolana] = useState();
   const [arraySelected, setArraySelected] = useState<any>([]);
 
+  const addressContractNFT =
+    process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true"
+      ? (process.env.NEXT_PUBLIC_ADDRESS_CONTRACT_TEST as any)
+      : (process.env.NEXT_PUBLIC_ADDRESS_CONTRACT_MAIN as any);
+
+  const contract = {
+    address: addressContractNFT,
+    abi: abiWassieverse,
+  };
+
+  const resultBalance = useReadContract({
+    ...contract,
+    functionName: "balanceOf",
+    args: [address],
+  });
+
+  const resultTotalSupply: any = useReadContract({
+    ...contract,
+    functionName: "totalSupply",
+    args: [],
+  });
+
+  const provider = new ethers.providers.InfuraProvider(
+    process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? "goerli" : "homestead",
+    process.env.NEXT_PUBLIC_KEY_INFRA
+  );
+  const contractNFT = new ethers.Contract(
+    addressContractNFT,
+    abiWassieverse,
+    provider
+  );
+  // console.log("result:", Number(result.data));
+
+  const checkRevealData = (link: any) => {
+    if (link !== undefined || link !== null || link !== "") {
+      if (link.slice(-4) === "json") {
+        return true;
+      }
+      return false;
+    }
+    return false;
+  };
+
+  const getOwnedNFTs = async () => {
+    console.log("123");
+    try {
+      const arrayOwnedTokenIDs = [];
+      for (var i = 0; i < Number(resultTotalSupply.data); i++) {
+        let resultAddress = await contractNFT.ownerOf(i);
+        if (resultAddress === address) {
+          arrayOwnedTokenIDs.push(i);
+        }
+      }
+      console.log("arrayOwnedTokenIDs:", arrayOwnedTokenIDs);
+
+      const arrayInfoOwnedNFTs = [];
+      if (arrayOwnedTokenIDs.length !== 0) {
+        for (var i = 0; i < arrayOwnedTokenIDs.length - 1; i++) {
+          let resultURI = await contractNFT.tokenURI(i);
+          console.log("resultURI:", resultURI);
+          console.log("link:", resultURI.slice(7, resultURI.length));
+          const fetchIPFS = await axios.get(
+            "https://ipfs.io/ipfs/" + resultURI.slice(7, resultURI.length)
+          );
+          console.log("fetchIPFS:", fetchIPFS.data);
+          let tempInfoNFT;
+          if (checkRevealData(resultURI) === false) {
+            tempInfoNFT = {
+              name: "Unrevealed",
+              description: "This is unrevealed NFT.",
+              image:
+                "https://ipfs.io/ipfs/" +
+                fetchIPFS.data.image.slice(7, fetchIPFS.data.image.length),
+              flagSelected: false,
+            };
+          }
+          arrayInfoOwnedNFTs.push(tempInfoNFT);
+        }
+        console.log("arrayInfoOwnedNFTs:", arrayInfoOwnedNFTs);
+        setArraySelected(arrayInfoOwnedNFTs);
+      }
+    } catch (error) {
+      console.log("error of getOwnedNFTs:", error);
+    }
+  };
+
   useEffect(() => {
     if (isConnected) {
+      // getOwnedNFTs();
       setStepProgress(1);
-      let tempArray = [];
-      for (var i = 0; i < dataNFTsList.length; i++) {
-        const dataEach = {
-          id: i,
-          name: dataNFTsList[i].name,
-          imgSrc: dataNFTsList[i].imgSrc,
-          flagSelected: false,
-        };
-        tempArray.push(dataEach);
-      }
-      setArraySelected(tempArray);
     } else {
       setStepProgress(0);
     }
   }, [isConnected]);
+
+  useEffect(() => {
+    getOwnedNFTs();
+  }, []);
 
   return (
     <StyledComponent>
