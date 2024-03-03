@@ -80,18 +80,18 @@ export default function Home() {
           arrayOwnedTokenIDs.push(i);
         }
       }
-      console.log("arrayOwnedTokenIDs:", arrayOwnedTokenIDs);
+      // console.log("arrayOwnedTokenIDs:", arrayOwnedTokenIDs);
 
       const arrayInfoOwnedNFTs = [];
       if (arrayOwnedTokenIDs.length !== 0) {
         for (var i = 0; i < arrayOwnedTokenIDs.length; i++) {
           let resultURI = await contractNFT.tokenURI(arrayOwnedTokenIDs[i]);
-          console.log("resultURI:", resultURI);
-          console.log("link:", resultURI.slice(7, resultURI.length));
+          // console.log("resultURI:", resultURI);
+          // console.log("link:", resultURI.slice(7, resultURI.length));
           const fetchIPFS = await axios.get(
             "https://ipfs.io/ipfs/" + resultURI.slice(7, resultURI.length)
           );
-          console.log("fetchIPFS:", fetchIPFS.data);
+          // console.log("fetchIPFS:", fetchIPFS.data);
           let tempInfoNFT;
           if (checkRevealData(resultURI) === false) {
             tempInfoNFT = {
@@ -116,7 +116,7 @@ export default function Home() {
           }
           arrayInfoOwnedNFTs.push(tempInfoNFT);
         }
-        console.log("arrayInfoOwnedNFTs:", arrayInfoOwnedNFTs);
+        // console.log("arrayInfoOwnedNFTs:", arrayInfoOwnedNFTs);
         setArraySelected(arrayInfoOwnedNFTs);
         setFlagLoadingNFTs(false);
       }
@@ -133,7 +133,6 @@ export default function Home() {
       setStepProgress(0);
     }
   }, [isConnected, address]);
-
 
   return (
     <StyledComponent>
