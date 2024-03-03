@@ -127,18 +127,13 @@ export default function Home() {
 
   useEffect(() => {
     if (isConnected && address !== undefined) {
-      // getOwnedNFTs();
+      getOwnedNFTs();
       setStepProgress(1);
     } else {
       setStepProgress(0);
     }
   }, [isConnected, address]);
 
-  useEffect(() => {
-    if (isConnected) {
-      getOwnedNFTs();
-    }
-  }, [isConnected, address]);
 
   return (
     <StyledComponent>
