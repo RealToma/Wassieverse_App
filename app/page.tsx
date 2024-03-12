@@ -2,12 +2,12 @@
 
 import { styled } from "styled-components";
 import { Box } from "@mui/material";
-import Header from "@/components/Layout/Header";
+import Header from "@/components/layout/header";
 import BridgeProgressBar from "@/components/ProgressBar/BridgeProgressBar";
 import { useEffect, useState } from "react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount, useReadContract } from "wagmi";
-import { dataNFTsList } from "@/components/Data/NFT";
+import { dataNFTsList } from "@/components/data/NFT";
 import StepSelectNFTs from "@/components/Tab/StepSelectNFTs";
 import StepInputSolana from "@/components/Tab/StepInputSolana";
 import StepTransferNFT from "@/components/Tab/StepTransferNFT";

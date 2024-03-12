@@ -49,7 +49,7 @@ const StepInputSolana = ({
       <TextBody>SOL Address</TextBody>
       <SectionInputSolAddress>
         <InputAddress
-          component="input"
+          as="input"
           placeholder="Paste your Solana Address"
           value={addressSolana}
           onChange={(e: any) => {
@@ -65,7 +65,7 @@ const StepInputSolana = ({
       </SectionInputSolAddress>
       <TextBody>Select Network</TextBody>
       <SectionSelectNetwork>
-        <InputAddress component="input" placeholder="SOLANA" disabled />
+        <InputAddress as="input" placeholder="SOLANA" disabled />
         <IconSelectNetwork>
           <MdOutlineKeyboardArrowDown />
         </IconSelectNetwork>

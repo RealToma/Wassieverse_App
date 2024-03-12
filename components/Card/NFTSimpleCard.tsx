@@ -1,6 +1,5 @@
 import { styled } from "styled-components";
 import { Box } from "@mui/material";
-import { useEffect, useState } from "react";
 import { FaSquareCheck } from "react-icons/fa6";
 
 const NFTSimpleCard = ({
@@ -21,7 +20,9 @@ const NFTSimpleCard = ({
   return (
     <StyledComponent
       onClick={() => handleSelect()}
-      active={each.flagSelected ? 1 : 0}
+      sx={{
+        border: each.flagSelected ? "2px solid rgba(0, 207, 255, 1)" : "2px solid rgba(0, 0, 0, 0)",
+      }}
     >
       <img src={each.image} width={"100%"} alt={each.name} />
       {each.flagSelected ? (

@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 import { Box } from "@mui/material";
-import { dataContactLinks } from "../Data/Link";
+import { dataContactLinks } from "../data/link";
 
 const Header = () => {
   const handleOpenLink = (each: any) => {
