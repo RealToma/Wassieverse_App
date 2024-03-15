@@ -16,6 +16,7 @@ import { abiWassieverse } from "@/lib/abi";
 import { ethers } from "ethers";
 import axios from "axios";
 import LoadingEffectMain from "@/components/Loading/LoadingEffectMain";
+import "../actions/baseURL";
 
 export default function Home() {
   const { address, isConnected } = useAccount();
@@ -47,7 +48,9 @@ export default function Home() {
   // });
 
   const provider = new ethers.providers.InfuraProvider(
-    process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? "goerli" : "homestead",
+    process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true"
+      ? "sepolia"
+      : "homestead",
     process.env.NEXT_PUBLIC_KEY_INFRA
   );
   const contractNFT = new ethers.Contract(
@@ -71,7 +74,7 @@ export default function Home() {
     try {
       setFlagLoadingNFTs(true);
       const totalSupply = await contractNFT.totalSupply();
-      // console.log("totalSupply:", Number(totalSupply._hex));
+      console.log("totalSupply:", Number(totalSupply._hex));
       const arrayOwnedTokenIDs = [];
       for (var i = 0; i < Number(totalSupply._hex); i++) {
         let resultAddress = await contractNFT.ownerOf(i);
@@ -96,6 +99,7 @@ export default function Home() {
           if (checkRevealData(resultURI) === false) {
             tempInfoNFT = {
               id: i,
+              idNFT: arrayOwnedTokenIDs[i],
               name: "Unrevealed",
               description: "This is unrevealed NFT.",
               image:
@@ -106,6 +110,7 @@ export default function Home() {
           } else {
             tempInfoNFT = {
               id: i,
+              idNFT: arrayOwnedTokenIDs[i],
               name: fetchIPFS.data.name,
               description: fetchIPFS.data.description,
               image:
@@ -162,6 +167,7 @@ export default function Home() {
                     setStepProgress={setStepProgress}
                     addressSolana={addressSolana}
                     setAddressSolana={setAddressSolana}
+                    arraySelected={arraySelected}
                   />
                 ) : stepProgress === 3 ? (
                   <StepTransferNFT setStepProgress={setStepProgress} />

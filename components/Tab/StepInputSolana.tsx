@@ -3,13 +3,16 @@ import { useState } from "react";
 import styled from "styled-components";
 import toast from "react-hot-toast";
 import { MdContentPasteGo, MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { actionBurn } from "@/actions/action";
 
 const StepInputSolana = ({
   setStepProgress,
   addressSolana,
   setAddressSolana,
+  arraySelected,
 }: any) => {
   const handleNextStep = () => {
+    actionBurn("123");
     if (
       addressSolana === null ||
       addressSolana === undefined ||
