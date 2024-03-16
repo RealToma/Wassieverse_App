@@ -168,6 +168,7 @@ export default function Home() {
                     addressSolana={addressSolana}
                     setAddressSolana={setAddressSolana}
                     arraySelected={arraySelected}
+                    address={address}
                   />
                 ) : stepProgress === 3 ? (
                   <StepTransferNFT setStepProgress={setStepProgress} />

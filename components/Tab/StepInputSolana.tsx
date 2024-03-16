@@ -4,28 +4,93 @@ import styled from "styled-components";
 import toast from "react-hot-toast";
 import { MdContentPasteGo, MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { actionBurn } from "@/actions/action";
+import { ethers } from "ethers";
+import { abiWassieverse } from "@/lib/abi";
 
 const StepInputSolana = ({
   setStepProgress,
   addressSolana,
   setAddressSolana,
   arraySelected,
+  address,
 }: any) => {
-  const handleNextStep = () => {
-    actionBurn("123");
-    if (
-      addressSolana === null ||
-      addressSolana === undefined ||
-      addressSolana === ""
-    ) {
-      return toast.error("Input your SOL address.");
+  const addressContractNFT =
+    process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true"
+      ? (process.env.NEXT_PUBLIC_ADDRESS_CONTRACT_TEST as any)
+      : (process.env.NEXT_PUBLIC_ADDRESS_CONTRACT_MAIN as any);
+  new ethers.providers.Web3Provider(window.ethereum);
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  // const provider = new ethers.providers.InfuraProvider(
+  //   process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true"
+  //     ? "sepolia"
+  //     : "homestead",
+  //   process.env.NEXT_PUBLIC_KEY_INFRA
+  // );
+  const signer = provider.getSigner();
+
+  const contractNFT = new ethers.Contract(
+    addressContractNFT,
+    abiWassieverse,
+    signer
+  );
+
+  const handleNextStep = async () => {
+    const selectNFTs = arraySelected.filter((each: any) => each.flagSelected);
+
+    const addressBurn = process.env.NEXT_PUBLIC_ADDRESS_BURN_WALLET;
+
+    try {
+      console.log("contractNFT:", contractNFT);
+      for (var i = 0; i < selectNFTs.length; i++) {
+        const data = contractNFT.interface.encodeFunctionData(
+          "safeTransferFrom",
+          [address, addressBurn, selectNFTs[i].idNFT]
+        );
+        console.log("data:", data);
+        const gasLimit = await contractNFT.estimateGas.safeTransferFrom(
+          address,
+          addressBurn,
+          selectNFTs[i].idNFT
+        );
+        console.log("gasLimit:", gasLimit);
+        const gasPrice = await provider.getGasPrice();
+        console.log("gasPrice:", gasPrice);
+        const nonce = await provider.getTransactionCount(address);
+        console.log("nonce:", nonce);
+        const transaction = {
+          from: address,
+          to: contractNFT.address,
+          gasLimit,
+          gasPrice,
+          nonce,
+          data,
+        };
+
+        console.log("transaction:", transaction);
+        const signedTx = await signer.signTransaction(transaction);
+        console.log("signedTx:", signedTx);
+      }
+    } catch (error) {
+      console.log("error of sign transaction:", error);
     }
-    setStepProgress(3);
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth",
-    });
+
+    // if (address === null || address === undefined) {
+    //   return toast.error("Please connect your wallet.");
+    // }
+    // if (
+    //   addressSolana === null ||
+    //   addressSolana === undefined ||
+    //   addressSolana === ""
+    // ) {
+    //   return toast.error("Input your SOL address.");
+    // }
+
+    // setStepProgress(3);
+    // window.scrollTo({
+    //   top: 0,
+    //   left: 0,
+    //   behavior: "smooth",
+    // });
   };
 
   const handleCancelStep = () => {
