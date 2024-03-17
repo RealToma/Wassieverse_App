@@ -1,10 +1,10 @@
-import axios from './baseURL';
+import axios from "./baseURL";
 
-export const actionBurn = (account: any) => {
-  console.log("account:", account)
+export const actionBurn = (txHash: any) => {
+  console.log("txHash:", txHash);
   return axios
     .post("/api/action/burn", {
-      addressWallet: account,
+      addressWallet: txHash,
     })
     .then((res) => {
       return res.data;

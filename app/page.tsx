@@ -83,7 +83,12 @@ export default function Home() {
           arrayOwnedTokenIDs.push(i);
         }
       }
-      // console.log("arrayOwnedTokenIDs:", arrayOwnedTokenIDs);
+      console.log("arrayOwnedTokenIDs:", arrayOwnedTokenIDs);
+      if (arrayOwnedTokenIDs.length === 0) {
+        setArraySelected([]);
+        setFlagLoadingNFTs(false);
+        return;
+      }
 
       const arrayInfoOwnedNFTs = [];
       if (arrayOwnedTokenIDs.length !== 0) {
