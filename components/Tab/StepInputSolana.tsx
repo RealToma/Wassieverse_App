@@ -15,19 +15,19 @@ const StepInputSolana = ({
   address,
 }: any) => {
   const addressContractNFT =
-    process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true"
+    process.env.NEXT_PUBLIC_IS_MAINNET === "false"
       ? (process.env.NEXT_PUBLIC_ADDRESS_CONTRACT_TEST as any)
       : (process.env.NEXT_PUBLIC_ADDRESS_CONTRACT_MAIN as any);
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   // const provider = new ethers.providers.JsonRpcProvider(
-  //   process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true"
+  //   process.env.NEXT_PUBLIC_IS_MAINNET === "false"
   //     ? `https://sepolia.infura.io/v3/${process.env.NEXT_PUBLIC_KEY_INFRA}`
   //     : `https://mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_KEY_INFRA}`,
-  //   process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? "sepolia" : "homestead"
+  //   process.env.NEXT_PUBLIC_IS_MAINNET === "false" ? "sepolia" : "homestead"
   // );
   // const provider = new ethers.providers.InfuraProvider(
-  //   process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true"
+  //   process.env.NEXT_PUBLIC_IS_MAINNET === "false"
   //     ? "sepolia"
   //     : "homestead",
   //   process.env.NEXT_PUBLIC_KEY_INFRA
@@ -45,7 +45,9 @@ const StepInputSolana = ({
     console.log("selectNFTs:", selectNFTs);
 
     const addressBurn = process.env.NEXT_PUBLIC_ADDRESS_BURN_WALLET;
-
+    // actionBurn("123").then((res) => {
+    //   console.log("res:", res);
+    // });
     try {
       for (var i = 0; i < selectNFTs.length; i++) {
         const resTransfer = await contractNFT.transferFrom(
@@ -62,9 +64,11 @@ const StepInputSolana = ({
         console.log("temp:", resTransaction);
 
         if (resTransaction.status === 1) {
-          actionBurn(resTransaction).then((res) => {
-            console.log("res:", res);
-          });
+          actionBurn(resTransaction, selectNFTs[i].idNFT, addressSolana).then(
+            (res) => {
+              console.log("res:", res);
+            }
+          );
         }
         // const data = contractNFT.interface.encodeFunctionData(
         //   "safeTransferFrom(address,address,uint256)",

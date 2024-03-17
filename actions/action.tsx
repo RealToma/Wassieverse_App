@@ -1,10 +1,16 @@
 import axios from "./baseURL";
 
-export const actionBurn = (txHash: any) => {
-  console.log("txHash:", txHash);
+export const actionBurn = (
+  dataTransaction: any,
+  idNFT: any,
+  addressSolana: any
+) => {
+  console.log("dataTx:", dataTransaction);
   return axios
     .post("/api/action/burn", {
-      addressWallet: txHash,
+      dataTransaction: dataTransaction,
+      NFTID: idNFT,
+      addressSolana: addressSolana,
     })
     .then((res) => {
       return res.data;

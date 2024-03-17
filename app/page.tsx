@@ -26,7 +26,7 @@ export default function Home() {
   const [flagLoadingNFTs, setFlagLoadingNFTs] = useState(false);
 
   const addressContractNFT =
-    process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true"
+    process.env.NEXT_PUBLIC_IS_MAINNET === "false"
       ? (process.env.NEXT_PUBLIC_ADDRESS_CONTRACT_TEST as any)
       : (process.env.NEXT_PUBLIC_ADDRESS_CONTRACT_MAIN as any);
 
@@ -48,7 +48,7 @@ export default function Home() {
   // });
 
   const provider = new ethers.providers.InfuraProvider(
-    process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true"
+    process.env.NEXT_PUBLIC_IS_MAINNET === "false"
       ? "sepolia"
       : "homestead",
     process.env.NEXT_PUBLIC_KEY_INFRA
