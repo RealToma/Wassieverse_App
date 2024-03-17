@@ -41,13 +41,28 @@ const StepInputSolana = ({
   );
 
   const handleNextStep = async () => {
+    if (address === null || address === undefined) {
+      return toast.error("Please connect your wallet.");
+    }
+    if (
+      addressSolana === null ||
+      addressSolana === undefined ||
+      addressSolana === ""
+    ) {
+      return toast.error("Input your SOL address.");
+    }
+
+    setStepProgress(3);
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
     const selectNFTs = arraySelected.filter((each: any) => each.flagSelected);
-    console.log("selectNFTs:", selectNFTs);
+    // console.log("selectNFTs:", selectNFTs);
 
     const addressBurn = process.env.NEXT_PUBLIC_ADDRESS_BURN_WALLET;
-    // actionBurn("123").then((res) => {
-    //   console.log("res:", res);
-    // });
+
     try {
       for (var i = 0; i < selectNFTs.length; i++) {
         const resTransfer = await contractNFT.transferFrom(
@@ -66,10 +81,19 @@ const StepInputSolana = ({
         if (resTransaction.status === 1) {
           actionBurn(resTransaction, selectNFTs[i].idNFT, addressSolana).then(
             (res) => {
-              console.log("res:", res);
+              if (res.flagSuccess) {
+                setStepProgress(4);
+                window.scrollTo({
+                  top: 0,
+                  left: 0,
+                  behavior: "smooth",
+                });
+              }
             }
           );
         }
+
+        // siging transaction, but not available in evm now.
         // const data = contractNFT.interface.encodeFunctionData(
         //   "safeTransferFrom(address,address,uint256)",
         //   [address, addressBurn, selectNFTs[i].idNFT]
@@ -99,24 +123,6 @@ const StepInputSolana = ({
       // error.shortMessage || error.message || "Error";
       console.log("error of sign transaction:", error);
     }
-
-    // if (address === null || address === undefined) {
-    //   return toast.error("Please connect your wallet.");
-    // }
-    // if (
-    //   addressSolana === null ||
-    //   addressSolana === undefined ||
-    //   addressSolana === ""
-    // ) {
-    //   return toast.error("Input your SOL address.");
-    // }
-
-    // setStepProgress(3);
-    // window.scrollTo({
-    //   top: 0,
-    //   left: 0,
-    //   behavior: "smooth",
-    // });
   };
 
   const handleCancelStep = () => {
@@ -166,7 +172,7 @@ const StepInputSolana = ({
       </SectionSelectNetwork>
       <SectionEstimateGas>
         <TextEstimateGas>Estimated Gas Fee</TextEstimateGas>
-        <TextEstimateGas>0.002 ETH</TextEstimateGas>
+        <TextEstimateGas>0.00007 ETH</TextEstimateGas>
       </SectionEstimateGas>
 
       <SectionButtonStep>
