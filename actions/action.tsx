@@ -5,7 +5,7 @@ export const actionBurn = (
   idNFT: any,
   addressSolana: any
 ) => {
-  console.log("dataTx:", dataTransaction);
+  // console.log("dataTx:", dataTransaction);
   return axios
     .post("/api/action/burn", {
       dataTransaction: dataTransaction,

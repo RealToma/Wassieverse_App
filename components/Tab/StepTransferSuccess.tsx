@@ -11,6 +11,7 @@ const StepTransferSuccess = ({ setStepProgress }: any) => {
       left: 0,
       behavior: "smooth",
     });
+    window.location.reload();
   };
 
   const handleCancelStep = () => {

@@ -71,12 +71,12 @@ const StepInputSolana = ({
           selectNFTs[i].idNFT
         );
         await resTransfer.wait();
-        console.log("resTransfer:", resTransfer);
+        // console.log("resTransfer:", resTransfer);
 
         const resTransaction: any = await provider.getTransactionReceipt(
           resTransfer.hash
         );
-        console.log("temp:", resTransaction);
+        // console.log("temp:", resTransaction);
 
         if (resTransaction.status === 1) {
           actionBurn(resTransaction, selectNFTs[i].idNFT, addressSolana).then(

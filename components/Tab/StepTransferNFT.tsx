@@ -60,14 +60,14 @@ const SecionIconProcessing = styled(Box)`
     // remove bellows command for perspective change
     //transform: perspective(200px) rotateX(65deg) rotate(45deg);
     color: #00cfff;
-    animation: layers1 0.6s linear infinite alternate;
+    animation: layers1 0.5s linear infinite alternate;
   }
   .loader:after {
     content: "";
     position: absolute;
     inset: 0;
     background: white;
-    animation: layerTr 0.6s linear infinite alternate;
+    animation: layerTr 0.5s linear infinite alternate;
   }
 
   @keyframes layers1 {

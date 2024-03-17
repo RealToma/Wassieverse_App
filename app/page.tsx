@@ -74,7 +74,7 @@ export default function Home() {
     try {
       setFlagLoadingNFTs(true);
       const totalSupply = await contractNFT.totalSupply();
-      console.log("totalSupply:", Number(totalSupply._hex));
+      // console.log("totalSupply:", Number(totalSupply._hex));
       const arrayOwnedTokenIDs = [];
       for (var i = 0; i < Number(totalSupply._hex); i++) {
         let resultAddress = await contractNFT.ownerOf(i);
@@ -83,7 +83,7 @@ export default function Home() {
           arrayOwnedTokenIDs.push(i);
         }
       }
-      console.log("arrayOwnedTokenIDs:", arrayOwnedTokenIDs);
+      // console.log("arrayOwnedTokenIDs:", arrayOwnedTokenIDs);
       if (arrayOwnedTokenIDs.length === 0) {
         setArraySelected([]);
         setFlagLoadingNFTs(false);
