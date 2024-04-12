@@ -11,6 +11,7 @@ const StepTransferSuccess = ({ setStepProgress }: any) => {
       left: 0,
       behavior: "smooth",
     });
+    window.location.reload();
   };
 
   const handleCancelStep = () => {
@@ -34,9 +35,9 @@ const StepTransferSuccess = ({ setStepProgress }: any) => {
           </div>
         </div>
       </SecionIconProcessing>
-      <TextTransferBig>NFT’s Transferred Successfully!</TextTransferBig>
+      <TextTransferBig>NFT has been successfully burned!</TextTransferBig>
       <TextTransferDescription>
-        Check your Solana Wallet for the assets.
+        Check your solana wallet for the assets.
       </TextTransferDescription>
       <SectionButtonStep>
         {/* <ButtonCancel onClick={() => handleCancelStep()}>Return</ButtonCancel> */}

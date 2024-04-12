@@ -43,7 +43,7 @@ const config = getDefaultConfig({
     // arbitrum,
     // base,
     // zora,
-    process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? goerli : mainnet,
+    process.env.NEXT_PUBLIC_IS_MAINNET === "false" ? sepolia : mainnet,
   ],
   ssr: true,
 });

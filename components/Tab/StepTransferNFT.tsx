@@ -4,14 +4,14 @@ import styled from "styled-components";
 import toast from "react-hot-toast";
 
 const StepTransferNFT = ({ setStepProgress }: any) => {
-  const handleNextStep = () => {
-    setStepProgress(4);
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth",
-    });
-  };
+  // const handleNextStep = () => {
+  //   setStepProgress(4);
+  //   window.scrollTo({
+  //     top: 0,
+  //     left: 0,
+  //     behavior: "smooth",
+  //   });
+  // };
 
   const handleCancelStep = () => {
     setStepProgress(2);
@@ -33,7 +33,7 @@ const StepTransferNFT = ({ setStepProgress }: any) => {
       </TextTransferDescription>
       <SectionButtonStep>
         <ButtonCancel onClick={() => handleCancelStep()}>Back</ButtonCancel>
-        <ButtonNext onClick={() => handleNextStep()}>Next</ButtonNext>
+        {/* <ButtonNext onClick={() => handleNextStep()}>Next</ButtonNext> */}
       </SectionButtonStep>
     </StyledComponent>
   );
@@ -60,14 +60,14 @@ const SecionIconProcessing = styled(Box)`
     // remove bellows command for perspective change
     //transform: perspective(200px) rotateX(65deg) rotate(45deg);
     color: #00cfff;
-    animation: layers1 0.8s linear infinite alternate;
+    animation: layers1 0.5s linear infinite alternate;
   }
   .loader:after {
     content: "";
     position: absolute;
     inset: 0;
     background: white;
-    animation: layerTr 0.8s linear infinite alternate;
+    animation: layerTr 0.5s linear infinite alternate;
   }
 
   @keyframes layers1 {

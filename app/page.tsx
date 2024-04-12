@@ -16,6 +16,7 @@ import { abiWassieverse } from "@/lib/abi";
 import { ethers } from "ethers";
 import axios from "axios";
 import LoadingEffectMain from "@/components/Loading/LoadingEffectMain";
+import "../actions/baseURL";
 
 export default function Home() {
   const { address, isConnected } = useAccount();
@@ -25,7 +26,7 @@ export default function Home() {
   const [flagLoadingNFTs, setFlagLoadingNFTs] = useState(false);
 
   const addressContractNFT =
-    process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true"
+    process.env.NEXT_PUBLIC_IS_MAINNET === "false"
       ? (process.env.NEXT_PUBLIC_ADDRESS_CONTRACT_TEST as any)
       : (process.env.NEXT_PUBLIC_ADDRESS_CONTRACT_MAIN as any);
 
@@ -47,7 +48,9 @@ export default function Home() {
   // });
 
   const provider = new ethers.providers.InfuraProvider(
-    process.env.NEXT_PUBLIC_ENABLE_TESTNETS === "true" ? "goerli" : "homestead",
+    process.env.NEXT_PUBLIC_IS_MAINNET === "false"
+      ? "sepolia"
+      : "homestead",
     process.env.NEXT_PUBLIC_KEY_INFRA
   );
   const contractNFT = new ethers.Contract(
@@ -81,6 +84,11 @@ export default function Home() {
         }
       }
       // console.log("arrayOwnedTokenIDs:", arrayOwnedTokenIDs);
+      if (arrayOwnedTokenIDs.length === 0) {
+        setArraySelected([]);
+        setFlagLoadingNFTs(false);
+        return;
+      }
 
       const arrayInfoOwnedNFTs = [];
       if (arrayOwnedTokenIDs.length !== 0) {
@@ -96,6 +104,7 @@ export default function Home() {
           if (checkRevealData(resultURI) === false) {
             tempInfoNFT = {
               id: i,
+              idNFT: arrayOwnedTokenIDs[i],
               name: "Unrevealed",
               description: "This is unrevealed NFT.",
               image:
@@ -106,6 +115,7 @@ export default function Home() {
           } else {
             tempInfoNFT = {
               id: i,
+              idNFT: arrayOwnedTokenIDs[i],
               name: fetchIPFS.data.name,
               description: fetchIPFS.data.description,
               image:
@@ -162,6 +172,8 @@ export default function Home() {
                     setStepProgress={setStepProgress}
                     addressSolana={addressSolana}
                     setAddressSolana={setAddressSolana}
+                    arraySelected={arraySelected}
+                    address={address}
                   />
                 ) : stepProgress === 3 ? (
                   <StepTransferNFT setStepProgress={setStepProgress} />

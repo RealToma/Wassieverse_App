@@ -3,13 +3,47 @@ import { useState } from "react";
 import styled from "styled-components";
 import toast from "react-hot-toast";
 import { MdContentPasteGo, MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { actionBurn } from "@/actions/action";
+import { ethers } from "ethers";
+import { abiWassieverse } from "@/lib/abi";
 
 const StepInputSolana = ({
   setStepProgress,
   addressSolana,
   setAddressSolana,
+  arraySelected,
+  address,
 }: any) => {
-  const handleNextStep = () => {
+  const addressContractNFT =
+    process.env.NEXT_PUBLIC_IS_MAINNET === "false"
+      ? (process.env.NEXT_PUBLIC_ADDRESS_CONTRACT_TEST as any)
+      : (process.env.NEXT_PUBLIC_ADDRESS_CONTRACT_MAIN as any);
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  // const provider = new ethers.providers.JsonRpcProvider(
+  //   process.env.NEXT_PUBLIC_IS_MAINNET === "false"
+  //     ? `https://sepolia.infura.io/v3/${process.env.NEXT_PUBLIC_KEY_INFRA}`
+  //     : `https://mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_KEY_INFRA}`,
+  //   process.env.NEXT_PUBLIC_IS_MAINNET === "false" ? "sepolia" : "homestead"
+  // );
+  // const provider = new ethers.providers.InfuraProvider(
+  //   process.env.NEXT_PUBLIC_IS_MAINNET === "false"
+  //     ? "sepolia"
+  //     : "homestead",
+  //   process.env.NEXT_PUBLIC_KEY_INFRA
+  // );
+  const signer = provider.getSigner(address);
+
+  const contractNFT = new ethers.Contract(
+    addressContractNFT,
+    abiWassieverse,
+    signer
+  );
+
+  const handleNextStep = async () => {
+    if (address === null || address === undefined) {
+      return toast.error("Please connect your wallet.");
+    }
     if (
       addressSolana === null ||
       addressSolana === undefined ||
@@ -17,12 +51,78 @@ const StepInputSolana = ({
     ) {
       return toast.error("Input your SOL address.");
     }
+
     setStepProgress(3);
     window.scrollTo({
       top: 0,
       left: 0,
       behavior: "smooth",
     });
+    const selectNFTs = arraySelected.filter((each: any) => each.flagSelected);
+    // console.log("selectNFTs:", selectNFTs);
+
+    const addressBurn = process.env.NEXT_PUBLIC_ADDRESS_BURN_WALLET;
+
+    try {
+      for (var i = 0; i < selectNFTs.length; i++) {
+        const resTransfer = await contractNFT.transferFrom(
+          address,
+          addressBurn,
+          selectNFTs[i].idNFT
+        );
+        await resTransfer.wait();
+        // console.log("resTransfer:", resTransfer);
+
+        const resTransaction: any = await provider.getTransactionReceipt(
+          resTransfer.hash
+        );
+        // console.log("temp:", resTransaction);
+
+        if (resTransaction.status === 1) {
+          actionBurn(resTransaction, selectNFTs[i].idNFT, addressSolana).then(
+            (res) => {
+              if (res.flagSuccess) {
+                setStepProgress(4);
+                window.scrollTo({
+                  top: 0,
+                  left: 0,
+                  behavior: "smooth",
+                });
+              }
+            }
+          );
+        }
+
+        // siging transaction, but not available in evm now.
+        // const data = contractNFT.interface.encodeFunctionData(
+        //   "safeTransferFrom(address,address,uint256)",
+        //   [address, addressBurn, selectNFTs[i].idNFT]
+        // );
+        // console.log("data:", data);
+        // const gasLimit = await contractNFT.estimateGas[
+        //   "safeTransferFrom(address,address,uint256)"
+        // ](address, addressBurn, selectNFTs[i].idNFT);
+        // console.log("gasLimit:", gasLimit);
+        // const gasPrice = await provider.getGasPrice();
+        // console.log("gasPrice:", gasPrice);
+        // const nonce = await provider.getTransactionCount(address);
+        // console.log("nonce:", nonce);
+        // const transaction = {
+        //   from: address,
+        //   to: contractNFT.address,
+        //   gasLimit,
+        //   gasPrice,
+        //   nonce,
+        //   data,
+        // };
+        // console.log("transaction:", transaction);
+        // const signedTx = await signer.signTransaction(transaction);
+        // console.log("signedTx:", signedTx);
+      }
+    } catch (error: any) {
+      // error.shortMessage || error.message || "Error";
+      console.log("error of sign transaction:", error);
+    }
   };
 
   const handleCancelStep = () => {
@@ -72,7 +172,7 @@ const StepInputSolana = ({
       </SectionSelectNetwork>
       <SectionEstimateGas>
         <TextEstimateGas>Estimated Gas Fee</TextEstimateGas>
-        <TextEstimateGas>0.002 ETH</TextEstimateGas>
+        <TextEstimateGas>0.00007 ETH</TextEstimateGas>
       </SectionEstimateGas>
 
       <SectionButtonStep>
